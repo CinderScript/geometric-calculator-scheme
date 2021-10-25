@@ -1,4 +1,21 @@
-
+;
+ ; Class:		CSC 3100 - Concepts in Programming Languages
+ ; Title:		Scheme: Geometric Calculator
+ ; Purpose:		The purpose of this assignment is to practice the following concepts:
+ ; 				Scheme
+ ;				Functional Programming
+ ;
+ ;				Files: fourpoints.scm
+ ;
+ ; 				fourpoints.scm provides function definitions needed for the 
+ ;				"test" statement of the 4Points BNF grammar exercise. 
+ ;				E.g.: the test(rectangle, a, b, c, d) statement will be 
+ ;				facilitated using the scheme function: process-rectangle
+ ;				definition found in this file.
+ ;
+ ; Author:		Maynard, Greg
+ ; Date:		10/24/2021
+;
 
 ; make-point
 ; Returns a value pair where the first value
