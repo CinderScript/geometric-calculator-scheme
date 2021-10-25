@@ -23,6 +23,31 @@
 (define (get-y point)
         (cdr point))
 
+; are-unique
+; Checks if all points are unique
+; Parameters: p1 = point 1 
+; 			  p2 = point 2 
+; 			  p3 = point 3 
+; Returns:	  #t if there are no duplicate points, else #f
+(define (are-unique p1 p2 p3)
+	(if (or (equal? p1 p2) (equal? p2 p3))
+		#f    
+		#t
+	))
+
+; are-equal
+; Checks if all points are the same - if they
+; represent a point, not a line or triangle
+; Parameters: p1 = point 1 
+; 			  p2 = point 2 
+; 			  p3 = point 3 
+; Returns:	  #t if all points are the same, else #f
+(define (are-equal p1 p2 p3)
+	(if (and (equal? p1 p2) (equal? p2 p3))
+		#t    
+		#f
+	))
+
 ; get-slope
 ; Returns the slope of a line given the lines start end end point.
 ; If the line is vertical, then '(vertical) is returned.
@@ -35,17 +60,6 @@
         (/ (- (get-y p1) (get-y p2) ) (- (get-x p1) (get-x p2)))
     ))
 
-; is-line
-; Returns #t if the given three points make a line by
-; checking if the slope between two sets of points is equal.
-; Parameters: p1 = point 1 
-; 			  p2 = point 2 
-; Returns:	  #t if line, else #f
-(define (is-line p1 p2 p3)
-        (if (equal? (get-slope p1 p2) (get-slope p2 p3))
-            #t    
-            #f))
-
 ; distance
 ; Returns the distance between two points
 ; Parameters: p1 = point 1 
@@ -56,6 +70,43 @@
            (y-diff (- (get-y p2) (get-y p1)) ))
         (sqrt (+ (expt x-diff 2) (expt y-diff 2)))
 	))
+
+; is-line
+; Returns #t if the given three points make a line by
+; checking if the slope between two sets of points is equal.
+; Parameters: p1 = point 1 
+; 			  p2 = point 2 
+; Returns:	  #t if line, else #f
+(define (is-line p1 p2 p3)
+        (if (are-unique p1 p2 p3)
+			; if there are no duplicate points, then check for slope
+            (if (equal? (get-slope p1 p2) (get-slope p2 p3) )
+				#t    ; slope is equal: line
+				#f	  ; slope is different: not a line	
+			) 
+			; else if they are all equal, then return false (is a point), else true 
+            (if (are-equal p1 p2 p3)
+				#f    ; it is a point, not a line
+				#t	  ; two points are the same, it is a line
+			)  								
+		))
+
+; is-triangle
+; Returns #t if the given three points make a triangle.
+; A triangle is not a line, and also not a single point.
+; Each point must be unique
+; Parameters: p1 = point 1 
+; 			  p2 = point 2 
+; 			  p3 = point 3 
+; Returns:	  #t if line, else #f
+(define (is-triangle p1 p2 p3)
+        (if (not (is-line p1 p2 p3))
+            (if (are-unique p1 p2 p3)
+				#t    ; triangle
+				#f	  ; single point
+			) 
+			#f	; is a line, not triangle  								
+		))
 
 ; triangle-perimeter
 ; returns the perimeter of a triangle given by thre points.  Assumes 
@@ -176,7 +227,7 @@
 ; Returns:	  (side-1 side-2 side-3 perimeter area) if triangle exists
 ; 			  (0 0 0 0 0) if triangle does not exist
 (define (process-triangle p1 p2 p3)
-    (if (not (is-line p1 p2 p3))	;if not a line, it is a triangle
+    (if (is-triangle p1 p2 p3)
         (begin
 			    (let ( 	(dist-1 (distance p1 p2)) 
 						(dist-2 (distance p2 p3))
@@ -204,5 +255,3 @@
 			(list 0 0 0 0 0)
 		)
     ))
-
-	
